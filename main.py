@@ -1,90 +1,100 @@
-#Zach Pedersen
-#This is my work!
-#Prof Citro
+#Zach Pedersen, Rylan Casanova
+#This is our work!
 #CST-305
+#Prof. Citro
 
-#Import necessary packages
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.integrate import odeint
-import warnings
-def fxn():
-    warnings.warn("deprecated", DeprecationWarning)
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    fxn()
+import matplotlib.pyplot as plt
 
-#Greens Function
-#Initial Conditions applied
-#Sets all equal to zero
-x = 0
-y0 = 0
-y1 = 0
 
-#Initial models for given ODEs
-def dU0_dx(U,x):
-    return [U[1],-2*U[1]+2*x-2]
-def dU1_dx(U,x):
-    return [U[1],4-U[0]]
-#Results from Part 1
-def FirstRes(x):
-    return (0.5*pow(x,2))-(1.5*x)-(0.75*np.exp(-2*x))+0.75
-def SecondRes(x):
-    return 4-(4*np.cos(x))
+def dudx1(u, x):
+    return [u[1], -2 * u[1] - u[0] + 2 * x]
+def dudx2(u, x):
+    return [u[1], 0 * u[1] - u[0] + x ** 2]
+def green1(x):
+    return 2 * ((x + 2) * np.exp(-x) + x - 2)
+def green2(x):
+    return (x ** 2 - 2) * np.sin(x) ** 2 + (x ** 2 - 2) * np.cos(x) ** 2 + 2 * np.cos(x)
 
-#ODEINT
-#Vectors for values of y and y'
-U0 = [0,0]
-xsp0 = np.linspace(0,10,250)
-ysp0 = odeint(dU0_dx,U0,xsp0)
-ysp0 = ysp0[:,0]
-U1 = [0,0]
-xsp1 = np.linspace(0,10,250)
-ysp1 = odeint(dU1_dx,U1,xsp1)
-ysp1 = ysp1[:,0]
 
-#Data arrays
-xsp2 = []
-ysp2 = []
-xsp3 = []
-ysp3 = []
+# number of points
+r = 101
+# start conditions
+x = np.linspace(0, r - 1, r)
+u = [0, 0]
 
-#Function to run loop 250 times
-#Adds Values to x and y space and updates Values
-for i in range(0,250):
-    xsp2.append(x)
-    ysp2.append(y0)
-    xsp3.append(x)
-    ysp3.append(y1)
-    y0 = FirstRes(x)
-    y1 = SecondRes(x)
-    x += 0.1
+# Calculates with Odeint
+uy = odeint(dudx1, u, x)
+y = uy[:, 0]
 
-#Plotting Section
-#First ODE
-plt.plot(xsp0,ysp0,'g-',label = "ODEint 1",linewidth = 3)
-plt.plot(xsp2,ysp2,'b:',label = "First Function",linewidth = 2)
-plt.suptitle("First ODE")
+
+# Plot results (Odeint1)
+plt.title('Odeint1')
+plt.plot(x, y, label="Odeint1")
+plt.xlabel('x')
+plt.ylabel('y')
 plt.legend()
-plt.xlabel("X Values")
-plt.ylabel("Y Values")
 plt.show()
 
-#Second ODE
-plt.plot(xsp1,ysp1,'g-',label = "ODEint 2",linewidth = 3)
-plt.plot(xsp3,ysp3,'b:',label = "Second Function",linewidth = 2)
-plt.suptitle("Second ODE")
+# number of points
+r = 101
+# start conditions
+x3 = np.linspace(0, r - 1, r)
+
+# Calculates with Odeint
+y3 = green1(x3)
+
+# Plot results (Green1)
+plt.title('Green1')
+plt.plot(x3, y3, label="Green1", linestyle=":")
+plt.xlabel('x')
+plt.ylabel('y')
 plt.legend()
-plt.xlabel("X Values")
-plt.ylabel("Y Values")
 plt.show()
 
-#Function for plotting the difference graph
-diff = [] #array to store difference
-for i in range(len(xsp0)):
-    diff.append(xsp0[i]-ysp0[i])
-plt.plot(ysp0,diff)
-plt.suptitle("Difference")
-plt.xlabel("x Points")
-plt.ylabel("Difference between ODE and Green's")
+# Show Odeint and Green together
+plt.plot(x, y, label="Odeint1")
+plt.plot(x3, y3, label="Green1", linestyle=":")
+plt.legend()
+plt.show()
+
+# number of points
+r = 101
+# start conditions
+x2 = np.linspace(0, r - 1, r)
+u2 = [0, 0]
+
+# Calculates with Odeint
+uy2 = odeint(dudx2, u2, x2)
+y2 = uy2[:, 0]
+
+# Plot results (Odeint2)
+plt.title('Odeint2')
+plt.plot(x2, y2, label="Odeint2")
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.show()
+
+# number of points
+r = 101
+# start conditions
+x4 = np.linspace(0, r - 1, r)
+
+# Calculates with Odeint
+y4 = green2(x4)
+
+# Plot results (Green2)
+plt.title('Green2')
+plt.plot(x4, y4, label="Green2", linestyle=":")
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.show()
+
+# Show Odeint and Green together
+plt.plot(x2, y2, label="Odeint2")
+plt.plot(x4, y4, label="Green2", linestyle=":")
+plt.legend()
 plt.show()
