@@ -1,8 +1,8 @@
 # CSTGF
-#ZachPedersen
+#ZachPedersen, Rylan Casanova
 #RicardoCitro
 
-My entry for the Project 3 – Green's Function and ODE for CST 305
+Our entry for the Project 3 – Green's Function for CST 305
 
 Library and Program installation steps:
 
